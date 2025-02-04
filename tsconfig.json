@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "moduleResolution": "Node",
     "strict": true,
@@ -9,8 +9,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "skipLibCheck": false,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["@react-three/fiber", "@react-three/drei"],
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"],
+      "@components/*": ["components/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "types"],
+  "exclude": ["node_modules"]
 }
