@@ -1,6 +1,6 @@
-import React from 'react';
+import Main from './pages/Main';
 import './App.css';
 
-const App = () => <h1>Init project</h1>;
+const App = () => <Main />;
 
 export default App;
