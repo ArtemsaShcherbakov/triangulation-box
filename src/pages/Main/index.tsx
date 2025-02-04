@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import BoxScene from '../../components/BoxScene';
+import BoxForm from '../../components/BoxForm';
 import styles from './style';
 
 const vertices = [
@@ -24,7 +25,7 @@ const vertices = [
 
 const Main: React.FC = () => (
   <Box sx={styles.mainPage}>
-    <Box sx={styles.inputPanel}></Box>
+    <BoxForm />
     <Box sx={styles.viewPanel}>
       <BoxScene vertices={vertices} />
     </Box>
