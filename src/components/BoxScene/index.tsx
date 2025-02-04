@@ -35,4 +35,5 @@ const BoxScene: React.FC<IBoxSceneProps> = ({ vertices }) => {
     </Canvas>
   );
 };
+
 export default BoxScene;

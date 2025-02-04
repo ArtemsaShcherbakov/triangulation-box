@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import CustomInput from '../UI/CustomInput';
+import ChangeThemeButton from '../UI/ChangeThemeButton';
 import { SizeBoxType, ErrorsType } from './types';
 import {
   INIT_STATE_SIZE_BOX,
@@ -13,6 +14,7 @@ import styles from './style';
 
 const BoxForm: React.FC = () => {
   const [sizeBox, setSizeBox] = useState<SizeBoxType>(INIT_STATE_SIZE_BOX);
+  const [checked, setChecked] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorsType>(INIT_STATE_ERRORS);
 
   const validateInput = (value: number): string => {
@@ -59,6 +61,10 @@ const BoxForm: React.FC = () => {
     }
   };
 
+  const toggleTheme = () => {
+    setChecked(!checked);
+  };
+
   return (
     <Box sx={styles.container}>
       {INPUTS_LIST.map((dataInput, index) => (
@@ -83,6 +89,7 @@ const BoxForm: React.FC = () => {
       >
         Calculate
       </Button>
+      <ChangeThemeButton checked={checked} handlerSwitch={toggleTheme} />
     </Box>
   );
 };
