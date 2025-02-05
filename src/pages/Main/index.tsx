@@ -1,35 +1,56 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import BoxScene from '../../components/BoxScene';
 import BoxForm from '../../components/BoxForm';
+import { getCalculatedBox } from '../../service';
+import { SizeBoxType } from '../../types';
+import {
+  INIT_STATE_SIZE_BOX,
+  INIT_STATE_ERRORS,
+  INPUTS_LIST,
+  ERROR_MESSAGES,
+} from '../../components/BoxForm/constants';
+
 import styles from './style';
 
-const vertices = [
-  // Передняя грань (Z = 0)
-  0, 0, 0, 2, 0, 0, 2, 3, 0, 0, 0, 0, 2, 3, 0, 0, 3, 0,
+const Main: React.FC = () => {
+  const [vertices, setVertices] = useState<number[]>([]);
+  const [sizeBox, setSizeBox] = useState<SizeBoxType>(INIT_STATE_SIZE_BOX);
 
-  // Задняя грань (Z = 1)
-  0, 0, 1, 2, 0, 1, 2, 3, 1, 0, 0, 1, 2, 3, 1, 0, 3, 1,
+  const isNotEmptyVertices = vertices.length > 0;
 
-  // Верхняя грань (Y = 3)
-  0, 3, 0, 2, 3, 0, 2, 3, 1, 0, 3, 0, 2, 3, 1, 0, 3, 1,
+  const calculatedBox = async () => {
+    try {
+      const response = await getCalculatedBox(sizeBox);
 
-  // Нижняя грань (Y = 0)
-  0, 0, 0, 2, 0, 0, 2, 0, 1, 0, 0, 0, 2, 0, 1, 0, 0, 1,
+      setVertices(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  // Левая грань (X = 0)
-  0, 0, 0, 0, 3, 0, 0, 3, 1, 0, 0, 0, 0, 3, 1, 0, 0, 1,
+  const handleInputData = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = Number(event.target.value);
+      const nameField = event.target.name;
 
-  // Правая грань (X = 2)
-  2, 0, 0, 2, 3, 0, 2, 3, 1, 2, 0, 0, 2, 3, 1, 2, 0, 1,
-];
+      setSizeBox({ ...sizeBox, [nameField]: value });
+    },
+    [sizeBox],
+  );
 
-const Main: React.FC = () => (
-  <Box sx={styles.mainPage}>
-    <BoxForm />
-    <Box sx={styles.viewPanel}>
-      <BoxScene vertices={vertices} />
+  return (
+    <Box sx={styles.mainPage}>
+      <BoxForm
+        sizeBox={sizeBox}
+        handleInputData={handleInputData}
+        calculatedBox={calculatedBox}
+      />
+      <Box sx={styles.viewPanel}>
+        {isNotEmptyVertices && <BoxScene vertices={vertices} />}
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default Main;

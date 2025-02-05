@@ -1,6 +1,7 @@
-import React from 'react';
+import { memo, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 import {
   CAMERA_SETTINGS,
   LIGHT_INTENSITY,
@@ -12,16 +13,35 @@ interface IBoxSceneProps {
   vertices: number[];
 }
 
-const BoxScene: React.FC<IBoxSceneProps> = ({ vertices }) => {
+const BoxScene: React.FC<IBoxSceneProps> = memo(({ vertices }) => {
   const verticesArray = new Float32Array(vertices);
   const numberVertices: number = vertices.length / 3;
 
+  const geometryRef = useRef<THREE.BufferGeometry>(null);
+
+  useEffect(() => {
+    if (geometryRef.current) {
+      if (geometryRef.current.getAttribute('position')) {
+        geometryRef.current.deleteAttribute('position');
+      }
+
+      geometryRef.current.setAttribute(
+        'position',
+        new THREE.BufferAttribute(verticesArray, NUMBER_VERTEX_COORDINATES),
+      );
+
+      geometryRef.current.computeVertexNormals();
+      geometryRef.current.attributes.position.needsUpdate = true;
+    }
+  }, [vertices]);
+
+  console.log('render');
   return (
     <Canvas camera={CAMERA_SETTINGS}>
       <ambientLight intensity={LIGHT_INTENSITY} />
       <directionalLight position={DIRECTIONAL_LIGHT_POSITION} />
       <mesh>
-        <bufferGeometry>
+        <bufferGeometry ref={geometryRef}>
           <bufferAttribute
             attach="attributes-position"
             array={verticesArray}
@@ -34,6 +54,8 @@ const BoxScene: React.FC<IBoxSceneProps> = ({ vertices }) => {
       <OrbitControls />
     </Canvas>
   );
-};
+});
+
+BoxScene.displayName = 'BoxScene';
 
 export default BoxScene;

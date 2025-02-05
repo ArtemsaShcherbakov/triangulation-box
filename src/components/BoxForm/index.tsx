@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import CustomInput from '../UI/CustomInput';
 import ChangeThemeButton from '../UI/ChangeThemeButton';
-import { SizeBoxType, ErrorsType } from './types';
+import { SizeBoxType } from '../../types';
+import { ErrorsType } from './types';
 import {
   INIT_STATE_SIZE_BOX,
   INIT_STATE_ERRORS,
@@ -12,8 +13,17 @@ import {
 
 import styles from './style';
 
-const BoxForm: React.FC = () => {
-  const [sizeBox, setSizeBox] = useState<SizeBoxType>(INIT_STATE_SIZE_BOX);
+interface IBoxFormProps {
+  sizeBox: SizeBoxType;
+  handleInputData: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  calculatedBox: () => void;
+}
+
+const BoxForm: React.FC<IBoxFormProps> = ({
+  sizeBox,
+  handleInputData,
+  calculatedBox,
+}) => {
   const [checked, setChecked] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorsType>(INIT_STATE_ERRORS);
 
@@ -27,13 +37,6 @@ const BoxForm: React.FC = () => {
     }
 
     return '';
-  };
-
-  const handleInputData = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-    const nameField = event.target.name;
-
-    setSizeBox({ ...sizeBox, [nameField]: value });
   };
 
   const validateData = (): boolean => {
@@ -57,7 +60,7 @@ const BoxForm: React.FC = () => {
 
   const handleCalculateBox = () => {
     if (validateData()) {
-      console.log('Valid data:', sizeBox); // test implementation
+      calculatedBox();
     }
   };
 
