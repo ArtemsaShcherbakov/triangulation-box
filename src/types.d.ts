@@ -1,4 +1,5 @@
 import { ThreeElements } from '@react-three/fiber';
+import { INIT_STATE_SIZE_BOX } from './components/BoxForm/constants';
 
 declare global {
   namespace React {
@@ -7,3 +8,5 @@ declare global {
     }
   }
 }
+
+export type SizeBoxType = typeof INIT_STATE_SIZE_BOX;

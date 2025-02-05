@@ -1,4 +1,4 @@
-import { SizeBoxType } from './types';
+import { SizeBoxType } from '../../types';
 
 export interface IInputList {
   lable: string;
