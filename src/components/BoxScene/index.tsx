@@ -1,6 +1,7 @@
-import { memo, useRef, useEffect } from 'react';
+import { memo, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { useTheme } from '@mui/material/styles';
 import * as THREE from 'three';
 import {
   CAMERA_SETTINGS,
@@ -14,42 +15,35 @@ interface IBoxSceneProps {
 }
 
 const BoxScene: React.FC<IBoxSceneProps> = memo(({ vertices }) => {
-  const verticesArray = new Float32Array(vertices);
-  const numberVertices: number = vertices.length / 3;
+  const theme = useTheme();
 
-  const geometryRef = useRef<THREE.BufferGeometry>(null);
+  const geometry = useMemo(() => {
+    const geom = new THREE.BufferGeometry();
 
-  useEffect(() => {
-    if (geometryRef.current) {
-      if (geometryRef.current.getAttribute('position')) {
-        geometryRef.current.deleteAttribute('position');
-      }
-
-      geometryRef.current.setAttribute(
+    if (vertices.length > 0) {
+      geom.setAttribute(
         'position',
-        new THREE.BufferAttribute(verticesArray, NUMBER_VERTEX_COORDINATES),
+        new THREE.BufferAttribute(
+          new Float32Array(vertices),
+          NUMBER_VERTEX_COORDINATES,
+        ),
       );
-
-      geometryRef.current.computeVertexNormals();
-      geometryRef.current.attributes.position.needsUpdate = true;
+      geom.computeVertexNormals();
     }
+
+    return geom;
   }, [vertices]);
 
-  console.log('render');
   return (
     <Canvas camera={CAMERA_SETTINGS}>
       <ambientLight intensity={LIGHT_INTENSITY} />
       <directionalLight position={DIRECTIONAL_LIGHT_POSITION} />
-      <mesh>
-        <bufferGeometry ref={geometryRef}>
-          <bufferAttribute
-            attach="attributes-position"
-            array={verticesArray}
-            count={numberVertices}
-            itemSize={NUMBER_VERTEX_COORDINATES}
-          />
-        </bufferGeometry>
-        <meshStandardMaterial color="orange" attach="background" wireframe />
+      <mesh geometry={geometry}>
+        <meshStandardMaterial
+          color={theme.palette.box}
+          attach="material"
+          side={THREE.DoubleSide}
+        />
       </mesh>
       <OrbitControls />
     </Canvas>
