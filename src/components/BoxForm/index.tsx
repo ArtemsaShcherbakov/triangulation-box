@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Box, Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { Context } from '../../context/context';
 import CustomInput from '../UI/CustomInput';
 import ChangeThemeButton from '../UI/ChangeThemeButton';
 import { SizeBoxType } from '../../types';
@@ -24,8 +26,12 @@ const BoxForm: React.FC<IBoxFormProps> = ({
   handleInputData,
   calculatedBox,
 }) => {
+  const theme = useTheme();
+
   const [checked, setChecked] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorsType>(INIT_STATE_ERRORS);
+
+  const toggleMode = useContext(Context);
 
   const validateInput = (value: number): string => {
     if (!value) {
@@ -65,13 +71,14 @@ const BoxForm: React.FC<IBoxFormProps> = ({
   };
 
   const toggleTheme = () => {
+    toggleMode();
     setChecked(!checked);
   };
 
   return (
-    <Box sx={styles.container}>
+    <Box sx={styles(theme).container}>
       {INPUTS_LIST.map((dataInput, index) => (
-        <Box key={index} sx={styles.inputContainer}>
+        <Box key={index} sx={styles(theme).inputContainer}>
           <CustomInput
             key={index}
             nameInput={dataInput.name}
@@ -79,15 +86,15 @@ const BoxForm: React.FC<IBoxFormProps> = ({
             onChange={handleInputData}
             labelText={dataInput.lable}
             typeInput={dataInput.type}
-            styleLable={styles.label}
-            styleInput={styles.textField}
+            styleLable={styles(theme).label}
+            styleInput={styles(theme).textField}
             error={errors[dataInput.name]}
           />
         </Box>
       ))}
       <Button
         variant="contained"
-        sx={styles.buttonCalculate}
+        sx={styles(theme).buttonCalculate}
         onClick={handleCalculateBox}
       >
         Calculate

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import BoxScene from '../../components/BoxScene';
 import BoxForm from '../../components/BoxForm';
 import { getCalculatedBox } from '../../service';
@@ -14,6 +15,8 @@ import {
 import styles from './style';
 
 const Main: React.FC = () => {
+  const theme = useTheme();
+
   const [vertices, setVertices] = useState<number[]>([]);
   const [sizeBox, setSizeBox] = useState<SizeBoxType>(INIT_STATE_SIZE_BOX);
 
@@ -40,13 +43,13 @@ const Main: React.FC = () => {
   );
 
   return (
-    <Box sx={styles.mainPage}>
+    <Box sx={styles(theme).mainPage}>
       <BoxForm
         sizeBox={sizeBox}
         handleInputData={handleInputData}
         calculatedBox={calculatedBox}
       />
-      <Box sx={styles.viewPanel}>
+      <Box sx={styles(theme).viewPanel}>
         {isNotEmptyVertices && <BoxScene vertices={vertices} />}
       </Box>
     </Box>

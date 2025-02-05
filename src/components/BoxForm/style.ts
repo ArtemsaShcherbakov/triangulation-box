@@ -1,4 +1,6 @@
-const styles = {
+import { Theme } from '@mui/material/styles';
+
+const styles = (theme: Theme) => ({
   container: {
     width: '40%',
     height: '100%',
@@ -7,7 +9,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '25px',
-    backgroundColor: '#000',
+    backgroundColor: theme.palette.primary.main,
     color: '#fff',
   },
 
@@ -21,6 +23,7 @@ const styles = {
 
   label: {
     width: '80px',
+    color: theme.palette.primary.contrastText,
   },
 
   textField: {
@@ -33,9 +36,9 @@ const styles = {
       borderRadius: '4px',
     },
     '& .MuiOutlinedInput-root': {
-      '& fieldset': { borderColor: '#fff' },
-      '&:hover fieldset': { borderColor: '#ccc' },
-      '&.Mui-focused fieldset': { borderColor: '#fff' },
+      '& fieldset': { borderColor: theme.palette.border.main },
+      '&:hover fieldset': { borderColor: theme.palette.border.hover },
+      '&.Mui-focused fieldset': { borderColor: theme.palette.border.main },
     },
     '& .MuiOutlinedInput-root.Mui-error': {
       '& fieldset': {
@@ -54,14 +57,14 @@ const styles = {
   buttonCalculate: {
     width: '120px',
     height: '40px',
-    backgroundColor: '#666',
+    backgroundColor: theme.palette.button.colorBackground,
     textTransform: 'none',
-    color: '#fff',
+    color: theme.palette.button.colorText,
 
     '&:hover': {
-      backgroundColor: '#555',
+      backgroundColor: theme.palette.button.colorHover,
     },
   },
-};
+});
 
 export default styles;
