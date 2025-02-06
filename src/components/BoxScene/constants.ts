@@ -1,6 +1,6 @@
 import { Vector3 } from '@react-three/fiber';
 
-const cameraPosition: Vector3 = [5, 5, 5];
+const cameraPosition: Vector3 = [0, 0, 5];
 
 export const CAMERA_SETTINGS = {
   position: cameraPosition,

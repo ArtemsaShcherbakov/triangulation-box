@@ -1,5 +1,5 @@
 import { ThreeElements } from '@react-three/fiber';
-import { INIT_STATE_SIZE_BOX } from './components/BoxForm/constants';
+import { INIT_STATE_SIZE_BOX } from './pages/Main/constants';
 
 declare global {
   namespace React {

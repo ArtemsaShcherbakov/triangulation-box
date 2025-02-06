@@ -4,4 +4,4 @@ import { SizeBoxType } from '../types';
 
 export const getCalculatedBox = (
   sizeBox: SizeBoxType,
-): Promise<AxiosResponse> => post('/triangulate', sizeBox);
+): Promise<AxiosResponse<number[]>> => post('/triangulate', sizeBox);

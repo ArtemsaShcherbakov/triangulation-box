@@ -1,11 +1,5 @@
 import { IInputList } from './interface';
 
-export const INIT_STATE_SIZE_BOX = {
-  height: 0,
-  width: 0,
-  length: 0,
-};
-
 export const INIT_STATE_ERRORS = {
   height: '',
   width: '',
@@ -15,6 +9,7 @@ export const INIT_STATE_ERRORS = {
 export const ERROR_MESSAGES = {
   fieldVoid: 'Это поле обязательно к заполнению',
   notPositiveNumber: 'Должно быть положительное число',
+  tooLarge: 'дохуя',
 };
 
 export const INPUTS_LIST: IInputList[] = [
@@ -34,3 +29,5 @@ export const INPUTS_LIST: IInputList[] = [
     name: 'length',
   },
 ];
+
+export const MAX_SIZE_SIDE = 1000;
