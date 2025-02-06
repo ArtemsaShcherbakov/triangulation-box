@@ -18,6 +18,7 @@ const BoxScene = lazy(() => import('../../components/BoxScene'));
 
 const Main: React.FC = () => {
   const theme = useTheme();
+  const styleds = styles(theme);
 
   const [vertices, setVertices] = useState<number[]>([]);
   const [sizeBox, setSizeBox] = useState<SizeBoxType>(INIT_STATE_SIZE_BOX);
@@ -32,10 +33,7 @@ const Main: React.FC = () => {
       setVertices(response.data);
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ error_message: string }>;
-      const errorText =
-        axiosError.response?.data?.error_message ||
-        axiosError.message ||
-        ERORRS_SERVER.unknownError;
+      const errorText = axiosError.message || ERORRS_SERVER.unknownError;
 
       setErrorReuire(errorText);
     }
@@ -56,17 +54,17 @@ const Main: React.FC = () => {
   };
 
   return (
-    <Box sx={styles(theme).mainPage}>
+    <Box sx={styleds.mainPage}>
       <BoxForm
         sizeBox={sizeBox}
         handleInputData={handleInputData}
         calculatedBox={calculatedBox}
       />
-      <Box sx={styles(theme).viewPanel}>
+      <Box sx={styleds.viewPanel}>
         {isNotEmptyVertices && (
           <Suspense
             fallback={
-              <CircularProgress size={SIZE_LOADER} sx={styles(theme).loader} />
+              <CircularProgress size={SIZE_LOADER} sx={styleds.loader} />
             }
           >
             <BoxScene vertices={vertices} />
