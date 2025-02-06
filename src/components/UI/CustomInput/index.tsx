@@ -31,9 +31,6 @@ const CustomInput: React.FC<ICustomInputProps> = ({
       onChange={onChange}
       error={!!error}
       helperText={error}
-      inputProps={{
-        maxLength: 5, // Максимальная длина (5 символов)
-      }}
     />
   </>
 );

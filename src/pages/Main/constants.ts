@@ -1,6 +1,6 @@
 import { SnackbarOrigin } from '@mui/material';
 
-export const ERORRS_SERVER = {
+export const ERRORS_SERVER = {
   unknownError: 'An unknown error occurred',
 } as const;
 
@@ -18,3 +18,9 @@ export const INIT_STATE_SIZE_BOX = {
 };
 
 export const SIZE_LOADER = 100;
+
+export const INIT_STATE_ERRORS = {
+  height: '',
+  width: '',
+  length: '',
+};
