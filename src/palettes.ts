@@ -30,7 +30,6 @@ declare module '@mui/material/styles' {
       colorBackground: string;
       colorHover: string;
     };
-    box: string;
   }
 }
 //light: '#ede3e3',

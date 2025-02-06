@@ -15,6 +15,10 @@ const styles = (theme: Theme) => ({
     height: '100%',
     background: theme.palette.secondary.main,
   },
+
+  loader: {
+    color: theme.palette.loading.pending,
+  },
 });
 
 export default styles;

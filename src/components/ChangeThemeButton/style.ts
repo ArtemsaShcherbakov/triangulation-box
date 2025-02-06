@@ -1,8 +1,7 @@
-import { Box } from '@mui/material';
-import Stormtroopers from '../../../assets/icons/storm-trooper.svg';
-import DarthVader from '../../../assets/icons/darth-vader.svg';
+import Stormtroopers from '../../assets/icons/storm-trooper.svg';
+import DarthVader from '../../assets/icons/darth-vader.svg';
 
-const StyledChangeThemeButton = {
+const styledChangeThemeButton = {
   position: 'relative',
   display: 'inline-block',
   width: '60px',
@@ -14,7 +13,7 @@ const StyledChangeThemeButton = {
   },
 };
 
-const StyledSlider = (checked: boolean) => ({
+const styledSlider = (checked: boolean) => ({
   position: 'absolute',
   cursor: 'pointer',
   top: 0,
@@ -46,4 +45,4 @@ const StyledSlider = (checked: boolean) => ({
   },
 });
 
-export { StyledChangeThemeButton, StyledSlider };
+export { styledChangeThemeButton, styledSlider };

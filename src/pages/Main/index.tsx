@@ -1,24 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { useCallback, useState, lazy, Suspense } from 'react';
+import { AxiosError } from 'axios';
+import { Box, Snackbar, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import BoxScene from '../../components/BoxScene';
 import BoxForm from '../../components/BoxForm';
 import { getCalculatedBox } from '../../service';
 import { SizeBoxType } from '../../types';
 import {
   INIT_STATE_SIZE_BOX,
-  INIT_STATE_ERRORS,
-  INPUTS_LIST,
-  ERROR_MESSAGES,
-} from '../../components/BoxForm/constants';
-
+  ERORRS_SERVER,
+  SNACKBAR_POSITION,
+  TIME_AUTO_HIDE_SNACKBAR,
+  SIZE_LOADER,
+} from './constants';
 import styles from './style';
+
+const BoxScene = lazy(() => import('../../components/BoxScene'));
 
 const Main: React.FC = () => {
   const theme = useTheme();
 
   const [vertices, setVertices] = useState<number[]>([]);
   const [sizeBox, setSizeBox] = useState<SizeBoxType>(INIT_STATE_SIZE_BOX);
+  const [errorReuire, setErrorReuire] = useState<string>('');
 
   const isNotEmptyVertices = vertices.length > 0;
 
@@ -27,8 +30,14 @@ const Main: React.FC = () => {
       const response = await getCalculatedBox(sizeBox);
 
       setVertices(response.data);
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ error_message: string }>;
+      const errorText =
+        axiosError.response?.data?.error_message ||
+        axiosError.message ||
+        ERORRS_SERVER.unknownError;
+
+      setErrorReuire(errorText);
     }
   };
 
@@ -42,6 +51,10 @@ const Main: React.FC = () => {
     [sizeBox],
   );
 
+  const handleClose = () => {
+    setErrorReuire('');
+  };
+
   return (
     <Box sx={styles(theme).mainPage}>
       <BoxForm
@@ -50,8 +63,23 @@ const Main: React.FC = () => {
         calculatedBox={calculatedBox}
       />
       <Box sx={styles(theme).viewPanel}>
-        {isNotEmptyVertices && <BoxScene vertices={vertices} />}
+        {isNotEmptyVertices && (
+          <Suspense
+            fallback={
+              <CircularProgress size={SIZE_LOADER} sx={styles(theme).loader} />
+            }
+          >
+            <BoxScene vertices={vertices} />
+          </Suspense>
+        )}
       </Box>
+      <Snackbar
+        anchorOrigin={SNACKBAR_POSITION}
+        open={!!errorReuire}
+        message={errorReuire}
+        onClose={handleClose}
+        autoHideDuration={TIME_AUTO_HIDE_SNACKBAR}
+      />
     </Box>
   );
 };

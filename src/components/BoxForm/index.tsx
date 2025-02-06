@@ -1,18 +1,16 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Context } from '../../context/context';
 import CustomInput from '../UI/CustomInput';
-import ChangeThemeButton from '../UI/ChangeThemeButton';
+import ChangeThemeButton from '../ChangeThemeButton';
 import { SizeBoxType } from '../../types';
 import { ErrorsType } from './types';
 import {
-  INIT_STATE_SIZE_BOX,
   INIT_STATE_ERRORS,
   INPUTS_LIST,
   ERROR_MESSAGES,
+  MAX_SIZE_SIDE,
 } from './constants';
-
 import styles from './style';
 
 interface IBoxFormProps {
@@ -28,10 +26,7 @@ const BoxForm: React.FC<IBoxFormProps> = ({
 }) => {
   const theme = useTheme();
 
-  const [checked, setChecked] = useState<boolean>(false);
   const [errors, setErrors] = useState<ErrorsType>(INIT_STATE_ERRORS);
-
-  const toggleMode = useContext(Context);
 
   const validateInput = (value: number): string => {
     if (!value) {
@@ -42,12 +37,16 @@ const BoxForm: React.FC<IBoxFormProps> = ({
       return ERROR_MESSAGES.notPositiveNumber;
     }
 
+    if (value > MAX_SIZE_SIDE) {
+      return ERROR_MESSAGES.tooLarge;
+    }
+
     return '';
   };
 
   const validateData = (): boolean => {
     let isValid = true;
-    const newErrors: ErrorsType = { height: '', width: '', length: '' };
+    const newErrors: ErrorsType = { ...INIT_STATE_ERRORS };
 
     Object.entries(sizeBox).forEach(([key, value]) => {
       const errorMessage = validateInput(value);
@@ -68,11 +67,6 @@ const BoxForm: React.FC<IBoxFormProps> = ({
     if (validateData()) {
       calculatedBox();
     }
-  };
-
-  const toggleTheme = () => {
-    toggleMode();
-    setChecked(!checked);
   };
 
   return (
@@ -99,7 +93,7 @@ const BoxForm: React.FC<IBoxFormProps> = ({
       >
         Calculate
       </Button>
-      <ChangeThemeButton checked={checked} handlerSwitch={toggleTheme} />
+      <ChangeThemeButton />
     </Box>
   );
 };
