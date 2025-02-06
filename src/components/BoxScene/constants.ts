@@ -6,7 +6,7 @@ export const CAMERA_SETTINGS = {
   position: cameraPosition,
   fov: 75,
   near: 0.1,
-  far: 1000,
+  far: 10000,
 };
 
 export const LIGHT_INTENSITY = 0.5;

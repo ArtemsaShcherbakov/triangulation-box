@@ -2,7 +2,7 @@ import { SnackbarOrigin } from '@mui/material';
 
 export const ERORRS_SERVER = {
   unknownError: 'An unknown error occurred',
-};
+} as const;
 
 export const SNACKBAR_POSITION: SnackbarOrigin = {
   vertical: 'top',
