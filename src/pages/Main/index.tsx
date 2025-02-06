@@ -1,16 +1,18 @@
-import { useCallback, useState, lazy, Suspense } from 'react';
+import { useMemo, useState, lazy, Suspense } from 'react';
 import { AxiosError } from 'axios';
 import { Box, Snackbar, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BoxForm from '../../components/BoxForm';
+import validateInput from '../../helpers/validate-input';
 import { getCalculatedBox } from '../../service';
-import { SizeBoxType } from '../../types';
+import { SizeBoxType, ErrorValidationType } from '../../types';
 import {
   INIT_STATE_SIZE_BOX,
-  ERORRS_SERVER,
+  ERRORS_SERVER,
   SNACKBAR_POSITION,
   TIME_AUTO_HIDE_SNACKBAR,
   SIZE_LOADER,
+  INIT_STATE_ERRORS,
 } from './constants';
 import styles from './style';
 
@@ -23,8 +25,10 @@ const Main: React.FC = () => {
   const [vertices, setVertices] = useState<number[]>([]);
   const [sizeBox, setSizeBox] = useState<SizeBoxType>(INIT_STATE_SIZE_BOX);
   const [errorReuire, setErrorReuire] = useState<string>('');
+  const [errorValidation, setErrorValidation] =
+    useState<ErrorValidationType>(INIT_STATE_ERRORS);
 
-  const isNotEmptyVertices = vertices.length > 0;
+  const isNotEmptyVertices = useMemo(() => vertices.length > 0, [vertices]);
 
   const calculatedBox = async () => {
     try {
@@ -33,24 +37,29 @@ const Main: React.FC = () => {
       setVertices(response.data);
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ error_message: string }>;
-      const errorText = axiosError.message || ERORRS_SERVER.unknownError;
+      const errorText = axiosError.message || ERRORS_SERVER.unknownError;
 
       setErrorReuire(errorText);
     }
   };
 
-  const handleInputData = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = Number(event.target.value);
-      const nameField = event.target.name;
+  const handleInputData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    const nameField = event.target.name;
 
-      setSizeBox({ ...sizeBox, [nameField]: value });
-    },
-    [sizeBox],
-  );
+    setSizeBox({ ...sizeBox, [nameField]: value });
+
+    const errorMessage = validateInput(value);
+
+    setErrorValidation({ ...errorValidation, [nameField]: errorMessage });
+  };
 
   const handleClose = () => {
     setErrorReuire('');
+  };
+
+  const setErrorValidationInput = (newErrors: ErrorValidationType) => {
+    setErrorValidation(newErrors);
   };
 
   return (
@@ -59,6 +68,8 @@ const Main: React.FC = () => {
         sizeBox={sizeBox}
         handleInputData={handleInputData}
         calculatedBox={calculatedBox}
+        errorValidation={errorValidation}
+        setErrorValidationInput={setErrorValidationInput}
       />
       <Box sx={styleds.viewPanel}>
         {isNotEmptyVertices && (

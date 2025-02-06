@@ -29,7 +29,7 @@ const BoxScene: React.FC<IBoxSceneProps> = memo(({ vertices }) => {
 
     return geom;
   }, [vertices]);
-
+  console.log('renderBox');
   return (
     <Canvas camera={CAMERA_SETTINGS}>
       <ambientLight intensity={LIGHT_INTENSITY} />

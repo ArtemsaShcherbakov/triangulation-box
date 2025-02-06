@@ -1,19 +1,12 @@
-import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import CustomInput from '../UI/CustomInput';
 import ChangeThemeButton from '../ChangeThemeButton';
 import convertToString from '../../helpers/convert-to-string';
-import isNumber from '../../helpers/is-number';
-import nonNegativeNumber from '../../helpers/non-negative-number';
-import isValueGreaterThanMaxSize from '../../helpers/is-value-greater-than-max-size';
-import { ErrorsType } from './types';
-import {
-  INIT_STATE_ERRORS,
-  INPUTS_LIST,
-  ERROR_MESSAGES,
-  MAX_SIZE_VALUE,
-} from './constants';
+import validateInput from '../..//helpers/validate-input';
+import { ErrorValidationType } from '../../types';
+import { INPUTS_LIST } from './constants';
+import { INIT_STATE_ERRORS } from '../../pages/Main/constants';
 import IBoxFormProps from './interface';
 import styles from './style';
 
@@ -21,24 +14,15 @@ const BoxForm: React.FC<IBoxFormProps> = ({
   sizeBox,
   handleInputData,
   calculatedBox,
+  errorValidation,
+  setErrorValidationInput,
 }) => {
   const theme = useTheme();
   const styleds = styles(theme);
 
-  const [errors, setErrors] = useState<ErrorsType>(INIT_STATE_ERRORS);
-
-  const validateInput = (value: number): string => {
-    if (!isNumber(value)) return ERROR_MESSAGES.NOT_NUMBER;
-    if (nonNegativeNumber(value)) return ERROR_MESSAGES.NOT_POSITIVE_NUMBER;
-    if (isValueGreaterThanMaxSize(value, MAX_SIZE_VALUE))
-      return ERROR_MESSAGES.TOO_LARGE;
-
-    return '';
-  };
-
   const validateData = (): boolean => {
     let isValid = true;
-    const newErrors: ErrorsType = { ...INIT_STATE_ERRORS };
+    const newErrors: ErrorValidationType = { ...INIT_STATE_ERRORS };
 
     Object.entries(sizeBox).forEach(([key, value]) => {
       const errorMessage = validateInput(value);
@@ -47,10 +31,10 @@ const BoxForm: React.FC<IBoxFormProps> = ({
         isValid = false;
       }
 
-      newErrors[key as keyof ErrorsType] = errorMessage;
+      newErrors[key as keyof ErrorValidationType] = errorMessage;
     });
 
-    setErrors(newErrors);
+    setErrorValidationInput(newErrors);
 
     return isValid;
   };
@@ -60,7 +44,7 @@ const BoxForm: React.FC<IBoxFormProps> = ({
       calculatedBox();
     }
   };
-
+  console.log('render');
   return (
     <Box sx={styleds.container}>
       {INPUTS_LIST.map((dataInput, index) => (
@@ -74,7 +58,7 @@ const BoxForm: React.FC<IBoxFormProps> = ({
             typeInput={dataInput.type}
             styleLable={styleds.label}
             styleInput={styleds.textField}
-            error={errors[dataInput.name]}
+            error={errorValidation[dataInput.name]}
           />
         </Box>
       ))}
