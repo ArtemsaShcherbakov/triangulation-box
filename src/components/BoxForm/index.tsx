@@ -44,7 +44,7 @@ const BoxForm: React.FC<IBoxFormProps> = ({
       calculatedBox();
     }
   };
-  console.log('render');
+
   return (
     <Box sx={styleds.container}>
       {INPUTS_LIST.map((dataInput, index) => (
